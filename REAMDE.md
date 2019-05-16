@@ -1,4 +1,4 @@
-You have to csv file to use:
+You have two csv file to use:
 
 path.csv
 Structure
