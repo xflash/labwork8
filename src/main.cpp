@@ -2,6 +2,7 @@
 #include <string>
 #include <list>
 #include <iterator>
+#include <fstream>
 
 using namespace std;
 
@@ -40,7 +41,15 @@ int main() {
 
     auto list = std::list<Station *>();
 
-    list.push_back(createStation(1, "station 1"));
+    //list.push_back(createStation(1, "station 1"));
+
+    std::ifstream stations_file("data/stations.csv");
+    std::string cell;
+
+    while (std::getline(stations_file, cell, '\r')) {
+        cout<<"Readed line "<<cell<<endl;
+      //  list.push_back(cell);
+    }
 
     displayList(&list);
 
