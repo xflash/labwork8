@@ -24,7 +24,7 @@ void readStations(const char *filename, std::vector<Station *> *stations);
 
 Station *createStation(int id, string name);
 
-Path *createPath(string id, string lineName, int stationId, string hour, int sequence);
+Path *createPath(std::vector<Station *> *stations, string id, string lineName, int stationId, string hour, int sequence);
 
 void displayStation(Station *item);
 
@@ -73,14 +73,14 @@ void readStations(const char *filename, std::vector<Station *> *stations) {
     }
 }
 
-void readPaths(const char *filename, std::list<Path *> *paths) {
+void readPaths(const char *filename, std::list<Path *> *paths, std::vector<Station *> *stations) {
     std::ifstream file(filename);
     std::string line;
     while (std::getline(file, line)) {
         const vector<string> &cells = split(line.data());
         // 301A_3_1_021AN_011004;A;105023;05:17:00;12
 
-        paths->push_back(createPath(
+        paths->push_back(createPath(stations,
                 cells.at(0),
                 cells.at(1),
                 std::stoi(cells.at(2)),
@@ -98,11 +98,12 @@ Station *createStation(int id, string name) {
 }
 
 
-Path *createPath(string id, string lineName, int stationId, string hour, int sequence) {
+Path *createPath(std::vector<Station *> *stations,
+        string id, string lineName, int stationId, string hour, int sequence) {
     Path *pPath = new Path;
     pPath->id = std::move(id);
     pPath->lineName = std::move(lineName);
-    pPath->stationId = stationId;
+    pPath->station = findStation(stations, stationId);
     pPath->hour = std::move(hour);
     pPath->sequenceNumber = sequence;
     return pPath;
@@ -116,7 +117,9 @@ void displayPaths(std::list<Path *> *paths) {
     for (const auto &item : *paths) {
         cout << item->id
              << " line:" << item->lineName
-             << " station:" << item->stationId
+             << " station:" << item->station->name
+             << " hour:" << item->hour
+             << " seq:" << item->sequenceNumber
              << endl;
 
     }
@@ -149,9 +152,9 @@ int main() {
     std::list<Path *> paths = std::list<Path *>();
 
     readStations("data/stations.csv", &stations);
-    readPaths("data/path.csv", &paths);
-
     displayStations(&stations);
+
+    readPaths("data/path.csv", &paths, &stations);
     displayPaths(&paths);
 
     int id = 105222;

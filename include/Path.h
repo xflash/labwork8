@@ -10,7 +10,7 @@
 struct Path {
     std::string id;
     std::string lineName;
-    int stationId;
+    Station *station;
     std::string hour;
     int sequenceNumber;
 };
