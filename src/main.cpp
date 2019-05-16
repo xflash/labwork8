@@ -9,29 +9,19 @@ using namespace std;
 
 #include "Station.h"
 
+Station *findStation(int id);
 
+void readStations(const char *filename, std::list<Station *> *list);
 
-Station *createStation(int id, string name) {
-    Station *pStation = new Station;
-    pStation->id = id;
-    pStation->name = name;
-    return pStation;
-}
+Station *createStation(int id, string name);
 
-void displayList(std::list<Station *> *list) {
-    for (const auto &item : *list) {
-        cout << item->id << ":" << item->name << endl;
-    }
-    cout << endl;
-}
+void displayStation(Station *item);
 
-void cleanupList(std::list<Station *> *list) {
-    cout << "Cleaning up list of " << list->size() << " elements" << endl;
+void displayList(std::list<Station *> *list);
 
-    for (auto &item : *list) {
-        delete item;
-    }
-}
+void cleanupList(std::list<Station *> *list);
+
+/////////////////////////////
 
 vector<string> split(const char *str, char c = ';') {
     vector<string> result;
@@ -47,6 +37,16 @@ vector<string> split(const char *str, char c = ';') {
     return result;
 }
 
+Station *findStation(std::list<Station *> *list, int id) {
+    for (const auto &item : *list) {
+        if (item->id == id)
+            return item;
+    }
+
+    return nullptr;
+}
+
+
 void readStations(const char *filename, std::list<Station *> *list) {
     std::ifstream stations_file(filename);
     std::string line;
@@ -58,6 +58,30 @@ void readStations(const char *filename, std::list<Station *> *list) {
     }
 }
 
+Station *createStation(int id, string name) {
+    Station *pStation = new Station;
+    pStation->id = id;
+    pStation->name = name;
+    return pStation;
+}
+
+void displayStation(Station *item) { cout << item->id << ":" << item->name << endl; }
+
+void displayList(std::list<Station *> *list) {
+    for (const auto &item : *list) {
+        displayStation(item);
+    }
+    cout << endl;
+}
+
+void cleanupList(std::list<Station *> *list) {
+    cout << "Cleaning up list of " << list->size() << " elements" << endl;
+
+    for (auto &item : *list) {
+        delete item;
+    }
+}
+
 int main() {
 
     std::list<Station *> stations = std::list<Station *>();
@@ -65,6 +89,15 @@ int main() {
     readStations("data/stations.csv", &stations);
 
     displayList(&stations);
+
+    int id = 105222;
+    Station *station = findStation(&stations, id);
+    if (station != nullptr) {
+        cout << "Station id " << id << " found : " << station->name << endl;
+    } else {
+        cerr << "Station not found " << endl;
+    }
+
 
     cleanupList(&stations);
 }
