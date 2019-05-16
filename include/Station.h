@@ -8,7 +8,6 @@
 #include <string>
 
 struct Station {
-
     int id;
     std::string name;
 };
