@@ -16,6 +16,7 @@ using namespace std;
 #include "Station.h"
 #include "Path.h"
 
+
 /////////////////////////////
 
 Station *findStation(std::vector<Station *> *stations, int id);
@@ -24,7 +25,8 @@ void readStations(const char *filename, std::vector<Station *> *stations);
 
 Station *createStation(int id, string name);
 
-Path *createPath(std::vector<Station *> *stations, string id, string lineName, int stationId, string hour, int sequence);
+Path *
+createPath(std::vector<Station *> *stations, string id, string lineName, int stationId, string hour, int sequence);
 
 void displayStation(Station *item);
 
@@ -56,7 +58,6 @@ Station *findStation(std::vector<Station *> *stations, int id) {
             return item;
     }
 
-    cerr << "Station id " << id << " not found " << endl;
 
     return nullptr;
 }
@@ -81,11 +82,11 @@ void readPaths(const char *filename, std::list<Path *> *paths, std::vector<Stati
         // 301A_3_1_021AN_011004;A;105023;05:17:00;12
 
         paths->push_back(createPath(stations,
-                cells.at(0),
-                cells.at(1),
-                std::stoi(cells.at(2)),
-                cells.at(3),
-                std::stoi(cells.at(4))
+                                    cells.at(0),
+                                    cells.at(1),
+                                    std::stoi(cells.at(2)),
+                                    cells.at(3),
+                                    std::stoi(cells.at(4))
         ));
     }
 }
@@ -99,7 +100,7 @@ Station *createStation(int id, string name) {
 
 
 Path *createPath(std::vector<Station *> *stations,
-        string id, string lineName, int stationId, string hour, int sequence) {
+                 string id, string lineName, int stationId, string hour, int sequence) {
     Path *pPath = new Path;
     pPath->id = std::move(id);
     pPath->lineName = std::move(lineName);
@@ -114,6 +115,7 @@ void displayStation(Station *item) {
 }
 
 void displayPaths(std::list<Path *> *paths) {
+    cout << "## PATHS" << endl;
     for (const auto &item : *paths) {
         cout << item->id
              << " line:" << item->lineName
@@ -127,6 +129,7 @@ void displayPaths(std::list<Path *> *paths) {
 }
 
 void displayStations(std::vector<Station *> *stations) {
+    cout << "## STATIONS" << endl;
     for (const auto &item : *stations) {
         displayStation(item);
     }
@@ -139,6 +142,7 @@ void cleanupStations(std::vector<Station *> *stations) {
         delete item;
     }
 }
+
 void cleanupPaths(std::list<Path *> *paths) {
     cout << "Cleaning up " << paths->size() << " paths" << endl;
     for (auto &item : *paths) {
@@ -149,11 +153,10 @@ void cleanupPaths(std::list<Path *> *paths) {
 int main() {
 
     std::vector<Station *> stations = std::vector<Station *>();
-    std::list<Path *> paths = std::list<Path *>();
-
     readStations("data/stations.csv", &stations);
     displayStations(&stations);
 
+    std::list<Path *> paths = std::list<Path *>();
     readPaths("data/path.csv", &paths, &stations);
     displayPaths(&paths);
 
@@ -161,10 +164,17 @@ int main() {
     Station *station = findStation(&stations, id);
     if (station != nullptr) {
         cout << "Station id " << id << " found : " << station->name << endl;
+    } else {
+        cout << "Station id " << id << " not found " << endl;
     }
-    // 99999 should not be founded
-    findStation(&stations, 99999);
-
+    // 99999 should not be founded  
+    id = 99999;
+    station = findStation(&stations, id);
+    if (station != nullptr) {
+        cout << "Station id " << id << " found : " << station->name << endl;
+    } else {
+        cout << "Station id " << id << " not found " << endl;
+    }
 
     cleanupPaths(&paths);
     cleanupStations(&stations);
