@@ -24,7 +24,7 @@ void readStations(const char *filename, vector<Station *> *stations) {
     // While the CSV file have some lines to be read
     while (getline(stations_file, line)) {
         //Split each line containing ; into cell vector
-        const vector<string> &cells = split(line);
+        const vector<string> &cells = split(line, ';');
         //Extracting cells content
         string name = cells.at(0);
         string sid = cells.at(1);

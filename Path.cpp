@@ -6,6 +6,7 @@
 #include <iterator>
 #include <fstream>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
@@ -24,7 +25,7 @@ void readPaths(const char *filename, list<Path *> *paths, vector<Station *> *sta
     // While there is some lines to be read
     while (getline(csvFile, line)) {
         //Split each line containing ; into cell vector
-        const vector<string> &cells = split(line);
+        const vector<string> &cells = split(line, ';');
 
         // 301A_3_1_021AN_011004;A;105023;05:17:00;12
 
@@ -61,7 +62,7 @@ Path *createPath(string id, string lineName, Station *station, string hour, int 
     pPath->id = id;
     pPath->lineName = lineName;
     pPath->station = station;
-    pPath->hour = hour;
+    pPath->hour = strToHour(hour);
     pPath->sequenceNumber = sequence;
     return pPath;
 }
@@ -78,16 +79,43 @@ void displayPaths(list<Path *> *paths) {
     for (it = paths->begin(); it != paths->end(); it++) {
         // Localize the path pointed by the iterator
         Path *item = *it;
-        cout //<< item->id
-                << " line:" << item->lineName
-                << " station:" << item->station->name
-                << " hour:" << item->hour
-                << " seq:" << item->sequenceNumber
-                << endl;
+
+
+        cout << item->id
+             << " line:" << item->lineName
+             << " station:" << item->station->name
+             << " hour:" << hourToString(item->hour)
+             << " seq:" << item->sequenceNumber
+             << endl;
 
     }
     cout << endl;
 }
+
+
+int strToHour(string str) {
+    //Split hour into 3 parts HH MM SS
+    vector<string> hourparts = split(str, ':');
+    int hh = stoi(hourparts.at(0));
+    int mm = stoi(hourparts.at(1));
+    int ss = stoi(hourparts.at(2));
+
+    return hh * 10000 + mm * 100 + ss;
+}
+
+string hourToString(int hour) {
+
+    int hh = hour / 10000;
+    int mm = (hour % 10000) / 100;
+    int ss = (hour % 10000) % 100;
+
+    std::stringstream sstream;
+    sstream << hh << ":" << mm << ":" << ss;
+
+    return sstream.str();
+
+}
+
 
 /**
  * Cleanup from memory the created instances
@@ -125,4 +153,55 @@ int countSubwaysForLine(list<Path *> *paths, string line) {
         }
     }
     return count;
+}
+
+
+struct path_hour_sorter {
+    inline bool operator()(const Path &path1, const Path &path2) {
+        return (path1.hour < path2.hour);
+    }
+};
+
+vector<Station *> findStation4LineAt(list<Path *> *paths, string line, int hour) {
+
+    vector<Station *> res = vector<Station *>();
+
+
+    // Declaring iterator to a list
+    list<Path *>::iterator it;
+
+    //First we collect only path concerning the required line
+    list<Path *> line_paths = list<Path *>();
+
+    //Iterate over the whole paths vector
+    for (it = paths->begin(); it != paths->end(); it++) {
+        Path *item = *it;
+        //Filter on the line name
+        if (item->lineName == line) {
+            line_paths.push_back(item);
+        }
+    }
+
+    //Second sort the line_paths by hour
+    line_paths.sort();
+
+
+    Station *lastStation = NULL;
+    //Iterate over the whole paths vector
+    for (it = line_paths.begin(); it != line_paths.end(); it++) {
+        Path *item = *it;
+        if (item->hour == hour) {
+            res.push_back(item->station);
+            return res;
+        }
+        if (item->hour < hour) {
+            lastStation = item->station;
+        } else if (item->hour > hour) {
+            res.push_back(lastStation);
+            res.push_back(item->station);
+            return res;
+        }
+    }
+
+    return res;
 }
