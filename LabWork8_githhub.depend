@@ -1,0 +1,56 @@
+# depslib dependency file v1.0
+1558888968 source:c:\users\gawayn\documents\labwork8_githhub\main.cpp
+	<utility>
+	<iostream>
+	<string>
+	<sstream>
+	<list>
+	<iterator>
+	<fstream>
+	<vector>
+	"Station.h"
+	"Path.h"
+	"StringUtils.h"
+
+1558887161 c:\users\gawayn\documents\labwork8_githhub\station.h
+	<string>
+
+1558888794 c:\users\gawayn\documents\labwork8_githhub\path.h
+	<string>
+	"Station.h"
+
+1558888928 source:c:\users\gawayn\documents\labwork8_githhub\station.cpp
+	<utility>
+	<iostream>
+	<string>
+	<sstream>
+	<list>
+	<iterator>
+	<fstream>
+	<vector>
+	"Station.h"
+	"StringUtils.h"
+
+1558887406 c:\users\gawayn\documents\labwork8_githhub\stringutils.h
+	<vector>
+	<string>
+
+1558887404 source:c:\users\gawayn\documents\labwork8_githhub\stringutils.cpp
+	<string>
+	<sstream>
+	<vector>
+	"StringUtils.h"
+
+1558888903 source:c:\users\gawayn\documents\labwork8_githhub\path.cpp
+	<utility>
+	<iostream>
+	<string>
+	<sstream>
+	<list>
+	<iterator>
+	<fstream>
+	<vector>
+	"Path.h"
+	"Station.h"
+	"StringUtils.h"
+
