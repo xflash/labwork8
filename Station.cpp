@@ -94,7 +94,7 @@ void displayStation(Station *item) {
  * Cleanup from memory the created instances
 **/
 void cleanupStations(std::vector<Station *> *stations) {
-    cout << "Cleaning up " << stations->size() << " stations" << endl;
+//    cout << "Cleaning up " << stations->size() << " stations" << endl;
      vector<Station *>::iterator it;
     //Iterate over the whole stations vector
      for (it = stations->begin(); it != stations->end(); it++) {

@@ -31,10 +31,10 @@ int main() {
 
     displayPaths(&paths);
 
-    cout << "Line A :" << countForLine("A") <<end;
-    cout << "Line B :" << countForLine("B") <<end;
-    cout << "Line C :" << countForLine("C") <<end;
-    cout << "Line D :" << countForLine("D") <<end;
+    cout << "Line A : " << countSubwaysForLine(&paths, "A") <<endl;
+    cout << "Line B : " << countSubwaysForLine(&paths, "B") <<endl;
+    cout << "Line C : " << countSubwaysForLine(&paths, "C") <<endl;
+    cout << "Line D : " << countSubwaysForLine(&paths, "D") <<endl;
 
     cleanupPaths(&paths);
     cleanupStations(&stations);

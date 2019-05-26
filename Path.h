@@ -19,10 +19,12 @@ struct Path {
 
 void readPaths(const char *filename, list<Path *> *paths, vector<Station *> *stations);
 
-Path *createPath(string id, string lineName, Station* station, string hour, int sequence);
+Path *createPath(string id, string lineName, Station *station, string hour, int sequence);
 
 void displayPaths(std::list<Path *> *paths);
 
 void cleanupPaths(list<Path *> *paths);
+
+int countSubwaysForLine(list<Path *> *paths, string line);
 
 #endif //LABWORK8_PATH_H

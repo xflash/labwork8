@@ -29,21 +29,21 @@ void readPaths(const char *filename, list<Path *> *paths, vector<Station *> *sta
         // 301A_3_1_021AN_011004;A;105023;05:17:00;12
 
         //Extract each cell of interest
-        string pathId=cells.at(0);
-        string lineName=cells.at(1);
-        string s_stationId=cells.at(2);
-        string hour=cells.at(3);
-        string s_sequence=cells.at(4);
+        string pathId = cells.at(0);
+        string lineName = cells.at(1);
+        string s_stationId = cells.at(2);
+        string hour = cells.at(3);
+        string s_sequence = cells.at(4);
         //Convert s_stationId to int
-        int stationId=stoi(s_stationId);
+        int stationId = stoi(s_stationId);
         //Search the station with this id
-        Station* station = findStation(stations, stationId);
+        Station *station = findStation(stations, stationId);
 
         //Convert s_sequence to int
-        int sequence=stoi(s_sequence);
+        int sequence = stoi(s_sequence);
 
         // Create a new Path
-        Path* new_path = createPath(pathId, lineName, station, hour, sequence);
+        Path *new_path = createPath(pathId, lineName, station, hour, sequence);
 
         // Add the path to the list pointer
         paths->push_back(new_path);
@@ -56,7 +56,7 @@ void readPaths(const char *filename, list<Path *> *paths, vector<Station *> *sta
 /**
  * Create a new instance of Path
 **/
-Path *createPath(string id, string lineName, Station* station, string hour, int sequence) {
+Path *createPath(string id, string lineName, Station *station, string hour, int sequence) {
     Path *pPath = new Path;
     pPath->id = id;
     pPath->lineName = lineName;
@@ -77,13 +77,13 @@ void displayPaths(list<Path *> *paths) {
     //Iterate over the whole paths vector
     for (it = paths->begin(); it != paths->end(); it++) {
         // Localize the path pointed by the iterator
-        Path* item = *it;
+        Path *item = *it;
         cout //<< item->id
-             << " line:" << item->lineName
-             << " station:" << item->station->name
-             << " hour:" << item->hour
-             << " seq:" << item->sequenceNumber
-             << endl;
+                << " line:" << item->lineName
+                << " station:" << item->station->name
+                << " hour:" << item->hour
+                << " seq:" << item->sequenceNumber
+                << endl;
 
     }
     cout << endl;
@@ -93,14 +93,36 @@ void displayPaths(list<Path *> *paths) {
  * Cleanup from memory the created instances
 **/
 void cleanupPaths(list<Path *> *paths) {
-    cout << "Cleaning up " << paths->size() << " paths" << endl;
-     // Declaring iterator to a list
+//    cout << "Cleaning up " << paths->size() << " paths" << endl;
+    // Declaring iterator to a list
     list<Path *>::iterator it;
     //Iterate over the whole paths vector
     for (it = paths->begin(); it != paths->end(); it++) {
         // Localize the path pointed by the iterator
-        Path* item = *it;
+        Path *item = *it;
         delete item;
     }
 }
 
+/**
+ * Count the total number of subways starting at each sequence 1 in each lines
+ * @param paths the list of paths
+ * @param line the line to search for
+ * @return the count
+ */
+int countSubwaysForLine(list<Path *> *paths, string line) {
+
+    // Declaring iterator to a list
+    list<Path *>::iterator it;
+
+    int count = 0;
+
+    //Iterate over the whole paths vector
+    for (it = paths->begin(); it != paths->end(); it++) {
+        Path *item = *it;
+        if (item->lineName == line && item->sequenceNumber == 1) {
+            count++;
+        }
+    }
+    return count;
+}
