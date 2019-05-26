@@ -9,8 +9,10 @@ idPath; lineName; idStation; hour; sequenceNumber;
 * stations.csv
 
 Structure
- 
+
 stationName; idStation
+
+
 
 ### Exo1
 You will have to create a structure called "station" containing all info about stations (name and id).
@@ -29,7 +31,7 @@ This function will return the string corresponding to this id.
  You will have to create a structure called "path" containing all info about paths (idPath, lineName, stationName, hour and sequenceNumber).
 
 ### Exo5
- You will have to create a structure called "linkedListPath" that will be a linked list of stations
+ You will have to create a structure called "linkedListPath" that will be a linked list of paths
 
 ### Exo6
  You will have to read the path.csv file and create the linkedListPath (you will have to use function from exo3 to fill the "stationName").
@@ -48,4 +50,4 @@ This function will return the string corresponding to this id.
 
 This function will display the previous and next station if the subway is between two station a this hour, or the station where the subway is.
 
-If there is no subway at this time, just display a message. 
+If there is no subway at this time, just display a message.
